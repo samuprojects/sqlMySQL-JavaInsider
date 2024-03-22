@@ -1,0 +1,13 @@
+Professor explicou que o mysql pode ser instalado usando Docker e sugeriu para consulta a documentação disponível em https://hub.docker.com/_/mysql caso seja de interesse.
+
+A outra forma explicada foi para Windows em https://www.mysql.com, Downloads, na parte inferior MySQL Community (GPL) Downloads, MySQL Community Server, professor pela opção  MSI Installer, depois opção mais abaixo No thanks, just start my download.
+Após executar o arquivo baixado, aceitar os termos, escolher instalação custom, não mudou nada seguiu com next / install.
+Ao final deixou marcado a caixa Run MySQL Configurator, depois Finish.
+
+Na tela do MySQL Configurator não mudou nada em relação a conectividade (para uso local).
+No menu seguinte definiu genericamente os acessos root como admin/admin e next.
+Relacionado ao serviço não mudou nada (manteve para definir como serviço e inicializar com o sistema, o padrão indicado).
+Sobre permissões em arquivos manteve o padrão ("Yes, grant full access to the user running the Windows Service (if applicable) and the administrators group only. Other users and groups will not have access.").
+Em Sample Databases não selecionou nada para criação.
+Na tela de Apply configuration apenas seguiu com o clique em Execute.
+No fim, next / finish.
