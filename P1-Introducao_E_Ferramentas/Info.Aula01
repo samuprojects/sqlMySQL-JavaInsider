@@ -1,0 +1,54 @@
+Sistemas trabalham com dados e existem várias formas de armazenar dados.
+Uma das formas é guardar dentro de um banco de dados, que nada mais é do que um repositório que mantém informações organizadas de alguma forma.
+Dentre as categorias de bancos de dados temos uma conhecida por:
+Banco de dados Relacionais
+
+Tem esse nome pois se baseia em relações entre tabelas.
+
+---------------------- 
+| Tabela de exemplo_1 |
+---------------------- 
+| | | | |
+| | | | |             
+| | | | |
+
+    |        ---------------------- 
+    |        | Tabela de exemplo_2 |
+    |        ----------------------
+    |        | | | | |
+    |----->  | | | | |             
+             | | | | |
+             
+                 |         ---------------------- 
+                 |         | Tabela de exemplo_3 |
+                 |         ---------------------- 
+                 |         | | | | |
+                 |----->   | | | | |             
+                           | | | | |
+                           
+                             ^        
+Structured                   |
+Query       ==================
+Language
+
+Linguagem para fazer consultas de forma estruturada. É utilizada para manusear dados do banco como:
+
+Criar (Create) registros
+Read (Ler) registros
+Update (Atualizar) registros
+Delete (Excluir) registros
+
+Não é uma linguagem de programação porque não tem uma sintaxe que permite trabalhar com loops, condicionais, criar variáveis, etc.
+
+Existe algum poder utilizando SQL mas basicamente serve para consultar, inserir, atualizar e excluir dados. Utilizamos para dar comandos para o banco de dados.
+
+Exemplos de alguns bancos de dados disponíveis no mercado:
+SQLServer
+MySQL
+PostgreSQL
+DB2 (IBM no mundo corporativo)
+Oracle
+entre outros.
+
+Para os conceitos desse curso o professor optou pelo MySQL, segundo ele, por gratuito e um dos mais utilizados no mundo.
+
