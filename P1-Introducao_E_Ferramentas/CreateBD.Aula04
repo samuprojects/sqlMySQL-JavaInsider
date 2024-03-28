@@ -1,0 +1,23 @@
+Professor explicou que um servidor de banco de dados pode conter vários banco de dados.
+Para criar um banco orientou clicar no ícone parecido com cilindro com um + (Create a new schema in the connected server) e colocar o nome do new schema como traveldb (porque o modelo de dados a ser desenvolvido no curso visa representar um sistema de passagens aéreas).
+Na parte de Charset/Collation deixou no default, depois Apply.
+Na tela seguinte apareceu uma tela com o comando SQL para executar a ação descrita anteriormente CREATE SCHEMA 'traveldb'; seguido do Apply e Finish, podendo fechar a aba com o nome do schema.
+No lado esquerdo vai aparecer um novo cilindro com o nome do banco, onde clicou para expandir a visualização.
+Para criar uma tabela clicou em Tables com botão do menu em Create Table, no lado direito nomeando (Table Name) como airplane. Mais abaixo no campo descrito como Column Name inserido como id, Datatype não mexeu (ficou como INT) e marcado as caixas PK + NN, seguido do Apply.
+Vai resultar em outra tela com os comandos SQL correspondentes
+CREATE TABLE 'traveldb'.'airplane'(
+ 'id' INT NOT NULL,
+ PRIMARY KEY('id'));
+ 
+ Depois Apply e Finish. Será possível observar essas informações no lado esquerdo.
+ Na aba Query digitou select * from traveldb.airplane e pressionou Ctrl + ENTER para executar, trazendo abaixo os resultados dos registros dessa tabela (null por não ter nada).
+ Outra opção para o comando é digitar apenas select * from airplane desde que com o botão de menu no banco esteja marcado como "Set as Default Schema", para que na ausência de um schema dentro do SQL vai utilizar o default, do contrário dará erro.
+ 
+ Para deixar sempre como padrão fechou tudo e na página principal do Workbench com o botão de menu na "Local instance MySQL81" / Edit Connection... na próxima tela na parte inferior, em Default Schema, informar o traveldb seguido de um Close.
+ 
+ Com isso ao abrir o Workbench e conectar o gerenciador já abrirá no traveldb.
+ 
+ Explicou deixar assim o padrão para focar mais nas tabelas e nos comandos SQL e menos nos detalhes burocráticos relativos à banco de dados.
+ 
+ Na sequencia fechou a aba Query e com o botão de menu na tabela airplane selecionou um Drop Table... na tela de confirmação clicar em Drop Now para executar.
+ É possível observar no Output que o comando realizado foi o DROP TABLE 'traveldb'.'airplane'
