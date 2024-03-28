@@ -1,0 +1,8 @@
+Professor orientou instalar o MySQL Workbench para administrar graficamente o banco de dados disponível em https://www.mysql.com/products/workbench/ , depois download now, escolher a versão do Sistema Operacional, no caso do professor utilizou a versão web com instalador menor na extensão MSI.
+Após baixar, na execução do instalador selecionou a opção Custom do Setup Type, em seguida abriu as abas +Applications, +MySQL Workbench, +MySQL Workbench 8.0, e deixou selecionado MySQL Workbench 8.0.34 clicando na seta para jogar para o lado direito para instalação.
+Depois seguiu com um next e Execute para baixar. e Depois outro next e outro Execute para rodar a instalação de fato. Ao final outro next e deixou marcado a caixa "Start MySQL Workbench after setup".
+Ao abrir o Workbench na tela principal já constará o servidor local do mysql instalado anteriormente.
+Ao clicar vai exibir as informações de conexão e solicitação da senha gerada anteriormente para o root, deixando marcado a caixa "Save password in vault".
+No caso do professor apareceu tela informando possível incompatibilidade do MySQL Workbench com a versão do banco de dados MySQL (porque o banco era 8.1 e o workbench foi testado até 8.0), que não era um problema de fato (deixando a caixa para não ver mais a mensagem marcada).
+Por fim apareceu a tela seguinte já conectado ao mysql.
+
