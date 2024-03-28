@@ -1,0 +1,36 @@
+Desenhando o modelo do banco de dados que vai armazenar as informações do sistema de viagens
+Análise macro do modelo
+
+CUSTOMER
+id
+name
+e-mail
+
+
+ADDRESS
+line1
+line2
+city
+country
+
+
+TICKET
+customer_id
+flight_id
+seat
+purchase_date
+
+
+FLIGHT
+number
+dep_ap
+arr_ap
+dep_time
+arr_time
+price
+
+
+AIRPORT
+iata_code
+name
+country
