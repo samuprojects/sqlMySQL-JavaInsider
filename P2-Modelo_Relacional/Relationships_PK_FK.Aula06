@@ -1,0 +1,18 @@
+            id ====> PK
+CUSTOMER    name
+   ^   ^    e-mail
+   |   |
+   |    \
+   |     \---------------TICKET ------------------> FLIGHT -------------> AIRPORT
+   |                     customer_id ==> FK    /--> number ==> PK         iata_code => PK
+ADDRESS                  flight_id   ==> FK --/     dep_ap ==> FK         name
+line1                    seat                       arr_ap ==> FK         country
+line2                    purchase_date              dep_time
+city                     id ===========> PK         arr_time
+country                                             price
+customer_id => PK
+            => FK
+
+
+
+
