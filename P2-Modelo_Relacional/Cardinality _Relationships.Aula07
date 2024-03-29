@@ -1,0 +1,47 @@
+Sobre a cardinalidade dos relacionamentos pode ser unidirecional, bidirecional com (4 tipos) cardinalidade no modelo relacional:
+1 para 1 ============>  1..1
+1 para muitos =======>  1..*
+muitos para 1 =======>  *..1
+muitos para muitos ==>  *..*
+
+outras variações
+0..1
+1..2
+
+para analisar a cardinalidade efetuar a seguinte pergunta:
+Um CUSTOMER está associado a quantos ADDRESS?
+No nosso sistema o cliente terá apenas 1 endereço. 1..1
+
+Um ADDRESS está associado a quantos CUSTOMER?
+O endereço está associado a apenas 1 cliente. 1..1
+
+O TICKET pertence a um CUSTOMER específico. *..1
+O CUSTOMER pode comprar quantos TICKETs quiser. 1..*
+
+Um TICKET (ou mais) está sempre associado a um FLIGHT. *..1
+Em compensação o mesmo FLIGHT pode fazer parte de vários TICKETs. 1..*
+
+Um FIGHT (ou mais) está associado a dois AIRPORT (saída-chegada). *..2
+Um AIRPORT está associado a muitos FIGHTs. 2..*
+
+A partir daí pode-se criar as tabelas que representam esse modelo.
+
+
+            id ====> PK
+CUSTOMER    name
+  1^   ^1   e-mail
+   |   |
+   |    \               *       *                 1        *            2
+   |     \---------------TICKET ------------------> FLIGHT -------------> AIRPORT
+   |1                    customer_id ==> FK    /--> number ==> PK         iata_code => PK
+ADDRESS                  flight_id   ==> FK --/     dep_ap ==> FK         name
+line1                    seat                       arr_ap ==> FK         country
+line2                    purchase_date              dep_time
+city                     id ===========> PK         arr_time
+country                                             price
+customer_id => PK
+            => FK
+
+
+
+
