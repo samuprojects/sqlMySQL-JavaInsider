@@ -1,0 +1,40 @@
+Para criação das tabelas começando pela Customer no workbench, com o botão direito do menu em Table, Create Table..., nomear como customer e em 
+Column Name   Datatype       PK NN  AI
+id            INT             y  y  y
+name          VARCHAR(45)        y
+email         VARCHAR(45)        y
+
+depois Apply para confirmar o código SQL
+CREATE TABLE `traveldb`.`customer` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NOT NULL,
+  `email` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`));
+  
+depois se clicar com o botão de menu na tabela customer, Select Rows - Limit 1000, vai chamar o código SELECT * FROM traveldb.customer; que exibirá os resultados em branco.
+
+Na sequencia a criação da tabela address
+Column Name   Datatype       PK NN  AI
+customer_id   INT             y  y  
+line1         VARCHAR(45)        y
+line2         VARCHAR(45)        
+city                             y
+country                          y
+
+na aba mais abaixo Foreign Keys para definir customer_id como FK inserir um nome qualquer que o professor sugeriu para esse cenário começar com fk mais o nome das tabelas de origem e destino:
+fk_address_customer_id_customer_id porque não pode ter nomes iguais de foreign keys, na Referenced Table selecionar 'traveldb'.'customer' e no lado direito selecionar customer_id para referenciar id
+Ao clicar Apply vai gerar o SQL
+CREATE TABLE `traveldb`.`address` (
+  `costumer_id` INT NOT NULL,
+  `line1` VARCHAR(45) NOT NULL,
+  `line2` VARCHAR(45) NULL,
+  `city` VARCHAR(45) NOT NULL,
+  `country` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`costumer_id`),
+  CONSTRAINT `fk_address_customer_id_customer_id`
+    FOREIGN KEY (`costumer_id`)
+    REFERENCES `traveldb`.`customer` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+depois se clicar com o botão de menu na tabela customer, Select Rows - Limit 1000, vai chamar o código SELECT * FROM traveldb.address; que exibirá os resultados em branco.
