@@ -1,0 +1,110 @@
+seguindo para a tabela airports, botão direito, create table..., nome da tabela airport com
+Column Name   Datatype       PK NN  AI
+iata_code     CHAR(3)         y  y
+name          VARCHAR(45)        y
+country       VARCHAR(45)        y
+
+Depois Apply, vai gerar o código SQL
+CREATE TABLE `traveldb`.`airport` (
+  `iata_code` CHAR(3) NOT NULL,
+  `name` VARCHAR(45) NOT NULL,
+  `country` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`iata_code`));
+
+depois se clicar com o botão de menu na tabela customer, Select Rows - Limit 1000, vai chamar o código SELECT * FROM traveldb.airport; que exibirá os resultados em branco.
+
+Em seguida a tabela fight
+Column Name             Datatype       PK NN  AI
+number                      INT             y  y  y
+dep_airport_iata_code   CHAR(3)            y       (importante que o tipo de dado da foreign keys seja correspondente com o tipo de dado do outro lado do relacionamento)
+arr_airport_iata_code   CHAR(3)            y
+dep_time                DATETIME           y
+arr_time                DATETIME           y
+price                   DECIMAL(8,2)       y       (8,2 significa que terá oito casas antes da vírgula e duas depois.)
+
+propositadamente não gerou as foreign keys para mostrar outro caminho seguindo com o Apply para geração do SQL
+CREATE TABLE `traveldb`.`flight` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `dep_airport_iata_code` CHAR(3) NOT NULL,
+  `arr_airport_iata_code` CHAR(3) NOT NULL,
+  `dep_time` DATETIME NOT NULL,
+  `arr_time` DATETIME NOT NULL,
+  `price` DECIMAL(8,2) NOT NULL,
+  PRIMARY KEY (`id`));
+
+Para fazer uma alteração em tabela existente com o botão direito Alter Table..., vai abrir a tela anterior onde pode selecionar a aba inferior Foreign Keys
+Foreign Key Name                             Referenced Table             Column                   Referenced Column
+fk_flight_iata_code_airport_iata_code_1      'traveldb'.'airport'         dep_airport_iata_code    iata_code
+fk_flight_iata_code_airport_iata_code_2      'traveldb'.'airport'         arr_airport_iata_code    iata_code
+
+
+após o Apply vai gerar o SQL com o alter table correspondente
+ALTER TABLE `traveldb`.`flight` 
+ADD INDEX `fk_flight_iata_code_airport_iata_code_1_idx` (`dep_airport_iata_code` ASC) VISIBLE,
+ADD INDEX `fk_flight_iata_code_airport_iata_code_2_idx` (`arr_airport_iata_code` ASC) VISIBLE;
+;
+ALTER TABLE `traveldb`.`flight` 
+ADD CONSTRAINT `fk_flight_iata_code_airport_iata_code_1`
+  FOREIGN KEY (`dep_airport_iata_code`)
+  REFERENCES `traveldb`.`airport` (`iata_code`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_flight_iata_code_airport_iata_code_2`
+  FOREIGN KEY (`arr_airport_iata_code`)
+  REFERENCES `traveldb`.`airport` (`iata_code`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+
+seguindo para criação da última tabela nome ticket
+Column Name         Datatype       PK NN  AI
+id                  INT             y  y  y
+customer_id         INT                y      
+flight_number       INT                y
+seat                INT                y
+purchase_date       DATETIME           y
+
+Foreing Keys
+Foreign Key Name                                  Referenced Table             Column               Referenced Column
+fk_ticket_customer_id_customer_id                 'traveldb'.'customer'        customer_id          id
+
+
+Código SQL após Apply
+CREATE TABLE `traveldb`.`ticket` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `customer_id` INT NOT NULL,
+  `flight_number` INT NOT NULL,
+  `seat` INT NOT NULL,
+  `purchase_date` DATETIME NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_ticket_customer_id_customer_id_idx` (`customer_id` ASC) VISIBLE,
+  CONSTRAINT `fk_ticket_customer_id_customer_id`
+    FOREIGN KEY (`customer_id`)
+    REFERENCES `traveldb`.`customer` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+verificado que havia erro no modelo com a tabela ticket
+alterado tabela flight
+mudado nome id para number gerando o código do alter table SQL após apply
+ALTER TABLE `traveldb`.`flight` 
+CHANGE COLUMN `id` `number` INT NOT NULL AUTO_INCREMENT ;
+
+voltando em alter table para ticket, nas foreign keys acrescentar
+Foreign Key Name                                  Referenced Table           Column               Referenced Column
+fk_ticket_flight_number_flight_number             'traveldb'.'flight'        flight_number        number
+
+com Apply vai gerar o código SQL
+ALTER TABLE `traveldb`.`ticket` 
+ADD INDEX `fk_ticket_flight_number_flight_number_idx` (`flight_number` ASC) VISIBLE;
+;
+ALTER TABLE `traveldb`.`ticket` 
+ADD CONSTRAINT `fk_ticket_flight_number_flight_number`
+  FOREIGN KEY (`flight_number`)
+  REFERENCES `traveldb`.`flight` (`number`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+Para confirmar as informações basta gerar o modelo pelo caminho no workbench
+menu Database / Reverse Engineer... / na tela de conexão mantém segue next / no teste da conexão segue next / escolher o traveldb depois next / após a geração outro next / por último um Execute, depois next, close
+
