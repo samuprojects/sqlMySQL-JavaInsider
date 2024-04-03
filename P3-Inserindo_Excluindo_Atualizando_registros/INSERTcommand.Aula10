@@ -1,0 +1,32 @@
+Para inserir registros em tabelas usando o SQL, começando pela tabela airport, não precisa diferenciar letras maiúsculas ou minúsculas nos comandos, não há restrição quanto a isso nos comandos do SQL.
+
+insert into significa que deseja inserir alguma coisa dentro de uma tabela, nesse caso airport, depois values e entre parênteses os valores para inserção.
+
+Para inserção de texto delimitamos os caracteres com uso de aspas simples e separamos os valores por vírgula. Para executar clicar no ícone do "raio" no workbench
+
+insert into airport values ('GRU', 'Aeroporto de Guarulhos', 'Brasil')
+
+após isso se executar um select por meio do botão direito (que gera o sql SELECT * FROM traveldb.airport;) vai exibis os dados inseridos.
+
+O professor explicou que essa forma de insert ele não recomenda pois, apesar de ser simples, é obrigado a fornecer os dados na ordem das colunas. Se em algum momento alterar o modelo da tabela, por exemplo, mudando o iata_code para o final (no lugar de country) esse insert ficará errado, tornando o iata_code com Brasil, GRU vira o nome e o país será "Aeroporto de Guarulhos", deixando totalmente inconsistente o insert.
+
+A dica do professor é colocar a ordem dos campos na própria instrução SQL durante a inserção.
+Aproveitou para comentar o código anterior apenas utilizando a cerquilha #
+#insert into airport values ('GRU', 'Aeroporto de Guarulhos', 'Brasil')
+
+Depois repetiu o mesmo comando, porém, com os nomes das colunas antes do values
+insert into airport (iata_code, name, country) values ('LAX', 'Aeroporto de Los Angeles', 'EUA')
+
+Outra dica é que se o cursor do mouse estiver na linha que deseja executar pode usar o atalho Ctrl + Enter do teclado.
+
+Observado que apesar de não ser necessário o uso do ponto e vírgula para rodar os comandos acima ao juntar o comando gerado automático no select do workbench para salvar num histórico a tela de query entende como se fosse a continuidade do comando gerando um erro, por isso, no histórico salvo foi incluído o ponto e vírgula.
+
+Em seguida inserido dados na tabela customer (lembrando que como o id do cliente é criado automaticamente não é necessário especificá-lo no ato da inserção)
+insert into customer (name, email) values ('Carlos', 'a@a.com');
+o comando acima já foi com o ponto e vírgula pois o professor confirmou minha observação anterior.
+
+Chamando o select do workbench (resulta no sql SELECT * FROM traveldb.customer;) poderá observar o id criado pelo banco
+
+Para observar melhor criado outro customer com valores ('Pedro', 'b@b.com') e o select para ver o id 2 gerado automaticamente.
+
+O professor explicou que o comando insert não permite inserção em múltiplas tabelas ao mesmo tempo, porque é um comando simples que não tem muitas variações justamente para servir a uma única tabela por vez.
