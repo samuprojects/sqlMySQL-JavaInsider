@@ -1,0 +1,64 @@
+visualizado dados da tabela airport que gerou SELECT * FROM traveldb.airport;
+# iata_code, name, country
+1'GRU', 'Aeroporto de Guarulhos', 'Brasil'
+2'LAX', 'Aeroporto de Los Angeles', 'EUA'
+
+depois visualizado dados da tabela customer que gerou SELECT * FROM traveldb.customer;
+# id, name, email
+1,'1', 'Carlos', 'a@a.com'
+2,'2', 'Pedro', 'b@b.com'
+
+
+Para simular que o cliente 1 comprou uma passagem é necessário ter um endereço e um voo associado a essa passagem (ticket)
+
+Para preencher o endereço visualizado estrutura que gerou SELECT * FROM traveldb.address;
+# costumer_id, line1, line2, city, country
+
+utilizado comando
+insert into address (customer_id, line1, city, country) values (1, 'Rua dos Abacates, 100. CEP 90000-000', 'Rio de Janeiro', 'Brasil');
+
+deu erro porque o meu estava com nome do campo errado realizado mudança que gerou SQL
+ALTER TABLE `traveldb`.`address` 
+DROP FOREIGN KEY `fk_address_customer_id_customer_id`;
+ALTER TABLE `traveldb`.`address` 
+CHANGE COLUMN `costumer_id` `customer_id` INT NOT NULL ;
+ALTER TABLE `traveldb`.`address` 
+ADD CONSTRAINT `fk_address_customer_id_customer_id`
+  FOREIGN KEY (`customer_id`)
+  REFERENCES `traveldb`.`customer` (`id`);
+
+repetido com sucesso o 
+insert into address (customer_id, line1, city, country) values (1, 'Rua dos Abacates, 100. CEP 90000-000', 'Rio de Janeiro', 'Brasil');
+
+visualizado os dados que geraram o SELECT * FROM traveldb.address;
+# customer_id, line1, line2, city, country
+1,'1', 'Rua dos Abacates, 100. CEP 90000-000', NULL, 'Rio de Janeiro', 'Brasil'
+
+depois visualizado os dados de flight que gerou SELECT * FROM traveldb.flight;
+# number, dep_airport_iata_code, arr_airport_iata_code, dep_time, arr_time, price
+
+para inserir os dados utilizado
+insert into flight (number, dep_airport_iata_code, arr_airport_iata_code, dep_time, arr_time, price) values (1234, 'GRU', 'LAX', '2030-10-01 14:00:00.000', '2030-10-02 03:00:00.000', 400.0);
+
+mostrando os resultados que gerou SELECT * FROM traveldb.flight;
+1,'1234', 'GRU', 'LAX', '2030-10-01 14:00:00', '2030-10-02 03:00:00', '400.00'
+
+Observação do professor: como existem chaves estrangeiras (aeroporto de chegada (arr_airport_iata_code) e aeroporto de saída dep_airport_iata_code) o banco de dados realiza a checagem dessas informações. De forma que não é possível inserir um registro que tem uma chave estrangeira que não tem a correspondencia do outro lado.
+
+Por exemplo: se tentar criar um novo voo que vai de GRU para MIA, que não existe na tabela, dará o Error Code: 1452. Cannot add or update a child row: a foreign key constraint fails , ou seja, como esse campo faz referencia a registros da tabela airport, só é possível inserir registros que existam na tabela airport, o próprio banco cuida disso não correndo o risco de colocar uma informação que ao juntar as tabelas, para tentar fazer correspondencia, não exista.
+
+executado nova visualização de flight que gera SELECT * FROM traveldb.flight;
+
+seguindo para criação do ticket, visualizado estrutura que gera SELECT * FROM traveldb.ticket;
+# id, customer_id, flight_number, seat, purchase_date
+
+como gera o id automaticamente para inserção dos dados foi utilizado
+insert into ticket (customer_id, flight_number, seat, purchase_date) values (1,1234, 13, '2030-01-01 00:00:00.000');
+
+ao exibir os tickets (que gera SQL SELECT * FROM traveldb.ticket;) o resultado será os tickets do cliente1
+# id, customer_id, flight_number, seat, purchase_date
+1,'1', '1', '1234', '13', '2030-01-01 00:00:00'
+
+Por causa dos relacionamentos das tabelas é possível identificar as coisas onde na tabela acima sabemos que o customer_id 1 é do cliente Carlos, e com base nisso sabemos que está no endereço da rua dos abacates, assim como o assento 13 é do voo 1234 (acessando a tabela voo poderá ver de onde sai e para onde vai chegar).
+Ou seja, as tabelas são criadas com os dados essencialmente aquela tabela e criando os relacionamentos para depois buscar os dados.
+Ficará mais claro o conceito na matéria do SELECT responsável por fazer a leitura dos dados (permitindo juntar os dados aproveitando o relacionamento entre as tabelas).
