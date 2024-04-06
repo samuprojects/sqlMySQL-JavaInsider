@@ -1,0 +1,41 @@
+Para excluir registros de uma tabela devemos usar o delete from, por exemplo, para excluir os registros da tabela customer basta usar delete from customer, PORÉM, essa forma deve ser usado com cuidado por que nesse caso vai excluir todos os registros da tabela. Para evitar isso é necessário realizar uma condição de filtragem utilizando o where, o comando ficaria como a seguir:
+delete from customer where id = 2;
+
+Ao pedir para exibir (que gera o SELECT * FROM traveldb.customer;) vai mostrar apenas o id1
+# id, name, email
+1,'1', 'Carlos', 'a@a.com'
+
+Posteriormente o professor criou um outro customer diretamente na tabela visual do workbench que resultou no SQL
+INSERT INTO `traveldb`.`customer` (`name`, `email`) VALUES ('Paulo', 'b@b.com');
+
+foi gerado um outro usuário com id = 3
+# id, name, email
+1,'1', 'Carlos', 'a@a.com'
+2,'3', 'Paulo', 'b@b.com'
+
+
+ao tentar excluir onde o nome é Paulo basta utilizando o comando 
+delete from customer where name = 'Paulo';
+é gerado um erro que não é de SQL. Consiste numa proteção que vem configurada por padrão no mySQL Workbench que evita a exclusão de registros por outro critério que não seja a chave primária dele. Error Code: 1175. You are using safe update mode and you tried to update a table without a WHERE that uses a KEY column.  To disable safe mode, toggle the option in Preferences -> SQL Editor and reconnect.
+Isso ocorre por ser potencialmente perigoso a exclusão por nome. Pode haver vários registros com Paulo e como não é uma chave única esse recurso impede a exclusão.
+O professor seguiu o caminho sugerido desabilitando o recurso de segurança e excluindo o Registro.
+Ao desabilitar o recurso, sair e voltar ao Workbench para atualizar as informações.
+Após exclusão o resultado SELECT * FROM traveldb.customer; foi
+# id, name, email
+1,'1', 'Carlos', 'a@a.com'
+
+Se quiser usar mais de uma condição basta usar o and conforme a seguir
+delete from customer where name = 'Paulo' and email = 'a@a.com';
+nesse exemplo nenhuma linha foi afetada porque não existe o registro com essas condições
+
+Ponto de atenção: tomar cuidado com as chaves estrangeiras, se tentar, por exemplo, excluir o cliente 1
+delete from customer where id = 1;
+dará um Error Code: 1451. Cannot delete or update a parent row: a foreign key constraint fails (`traveldb`.`address`, CONSTRAINT `fk_address_customer_id_customer_id` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`))
+Que informa que a foreign key constraint falhou. Isso ocorre porque como está referenciado em outras tabelas, se fosse possível excluir, elas ficariam com a informação errada (indevida, referenciando customer que não existe).
+Observado esses relacionamentos com SELECT * FROM traveldb.ticket; e SELECT * FROM traveldb.address;
+Ou seja, não pode excluir um registro que tem chave estrangeira para outro lugar.
+
+Professor explicou que existem técnicas que resolvem isso como ON DELETE CASCADE e outros, mas que foge do escopo da aula, por entrar na área mais de modelagem de banco de dados (integração de sistemas, etc) do que SQL propriamente dito.
+
+A solução para esse caso é primeiro excluir esses outros 3 registros dependentes para depois seguir com o do usuário.
+
