@@ -1,0 +1,28 @@
+Foi iniciado com visualização da tabela customer que gerou SQL SELECT * FROM traveldb.customer;
+
+exibindo a tabela
+# id, name, email
+1,'1', 'Carlos', 'a@a.com'
+
+Para atualizar um ou mais campos desse registro utilizamos o update seguido do nome da tabela e set para definir os campos.
+Por exemplo, para alterar o email, update customer set email = 'sam@a.com'
+
+se quiser incluir mais um acrescentamos uma vírgula e definimos por exemplo o nome
+update customer set email = 'sam@a.com', name = 'Samu';
+
+PORÉM, existe um problema nos comandos acima que se executado da forma em que está vai atualizar todos esses campos de todos os registros da tabela e normalmente não é isso que desejamos.
+
+Por isso, assim como foi explicado no DELETE, aqui também é necessário utilizar o where para especificar qual ou quais registros devem ser alterados, ficando o código como a seguir:
+update customer set email = 'sam@a.com', name = 'Samu' where id = 1;
+
+Executando novamente a visualização será possível checar as atualizações (SQL gerado SELECT * FROM traveldb.customer;)
+# id, name, email
+1,'1', 'Samu', 'sam@a.com'
+
+Observando a tabela flight para, por exemplo, atualizar o preço (SQL gerado SELECT * FROM traveldb.flight;)
+# number, dep_airport_iata_code, arr_airport_iata_code, dep_time, arr_time, price
+1,'1234', 'GRU', 'LAX', '2030-10-01 14:00:00', '2030-10-02 03:00:00', '400.00'
+
+Utilizamos o comando update flight set price  = 410.0 where number = 1234; para lançar um reajuste, por exemplo.
+
+Em resumo, no update informamos qual é a tabela, quais serão os novos valores junto com a condição para seleção correta do registro a ser atualizado (ficar atento pois se a condição estiver errada poderá alterar registros indevidos e depois não é possível desfazer).

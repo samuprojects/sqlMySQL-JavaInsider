@@ -1,0 +1,56 @@
+Para extrair dados do banco utilizando a linguagem SQL existem muitas opções e são baseadas na instrução SELECT.
+
+A forma mais simples de SELECT já foi trabalhada em várias aulas anteriores ao visualizar os dados das tabelas, onde o workbench automaticamente gera o SQL SELECT * FROM traveldb.customer; (ao buscar a visualização da tabela customer), traz todos os dados da respectiva tabela.
+
+(
+Observado que o professor atualizou a tabela dele com outros exemplos, por isso realizado uma atualização manualmente pelo gerenciador workbench para deixar igual a do professor
+# id, name, email
+1'1', 'Paulo Silva', 'paulo@abc.com'
+2'2', 'José Moreira', 'jose@abc.com'
+3'3', 'Maria Santos', 'maria@abc.com'
+)
+
+A anatomia do SELECT consiste em SELECT + a projeção, que será explicado depois, utilizamos o *, depois o FROM seguido do nome da tabela e se quiser pode incluir uma seleção, ou condição específica para buscar.
+
+O * no comando (projeção) se refere as colunas que serão retornadas nesse processo de busca das informações na tabela do banco de dados. E o * indica que deve retornar todos os campos (ou seja, no exemplo do customer as colunas id, name e email).
+
+Se quiser retornar um campo específico, por exemplo id, basta trocar o * por id SELECT id FROM traveldb.customer;
+# id
+1'1'
+2'2'
+3'3'
+
+Se quiser id + nome sem o email SELECT id, name FROM traveldb.customer
+# id, name
+1'1', 'Paulo Silva'
+2'2', 'José Moreira'
+3'3', 'Maria Santos'
+
+Usar projeção permite utilizar Alias, que é um apelido para o nome da coluna.
+Observado que ao retornar os dados o professor se preocupar de não utilizar o termo "filtrado" para o resultado da busca e sim projetado.
+SELECT * FROM address;
+Verificado dados a mais no exemplo professor atualizado diretamente pelo Workbench que gerou sql
+INSERT INTO `traveldb`.`address` (`customer_id`, `line1`, `city`, `country`) VALUES ('2', 'Rua do Limoeiro, 40, ap. 100', 'Fortaleza', 'Brasil');
+INSERT INTO `traveldb`.`address` (`customer_id`, `line1`, `city`, `country`) VALUES ('3', 'Rua da Pera, 240', 'Rio de Janeiro', 'Brasil');
+
+resultando em
+# customer_id, line1, line2, city, country
+1'1', 'Rua dos Abacates, 100. CEP 90000-000', NULL, 'Rio de Janeiro', 'Brasil'
+2'2', 'Rua do Limoeiro, 40, ap. 100', NULL, 'Fortaleza', 'Brasil'
+3'3', 'Rua da Pera, 240', NULL, 'Rio de Janeiro', 'Brasil'
+
+
+Para o exemplo do Alias utilizou a tabela address conforme a seguir
+SELECT customer_id, city FROM address;
+# customer_id, city
+1'1', 'Rio de Janeiro'
+2'2', 'Fortaleza'
+3'3', 'Rio de Janeiro'
+
+Para ver esses mesmos campos com outro nome no momento da projeção (sem alterar os campos originais da tabela) utilizar o comando AS conforme a seguir:
+SELECT customer_id AS 'ID do cliente', city AS 'Cidade' FROM address;
+# ID do cliente, Cidade
+1'1', 'Rio de Janeiro'
+2'2', 'Fortaleza'
+3'3', 'Rio de Janeiro'
+
