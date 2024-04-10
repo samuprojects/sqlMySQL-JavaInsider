@@ -1,0 +1,75 @@
+O SELECT permite fazer ordenação de registros de acordo com determinada coluna ou colunas em ordem ascendente ou descendente.
+Na busca pelas informações de ticket gerado SELECT * FROM ticket; verificado novos valores inseridos graficamente que gerou
+INSERT INTO `traveldb`.`ticket` (`id`, `customer_id`, `flight_number`, `seat`, `purchase_date`) VALUES ('2', '1', '4343', '10', '2030-06-10 09:00:00');
+INSERT INTO `traveldb`.`ticket` (`id`, `customer_id`, `flight_number`, `seat`, `purchase_date`) VALUES ('3', '1', '1234', '16', '2030-02-02 20:00:00');
+INSERT INTO `traveldb`.`ticket` (`id`, `customer_id`, `flight_number`, `seat`, `purchase_date`) VALUES ('4', '2', '4589', '27', '2030-03-28 15:00:00');
+INSERT INTO `traveldb`.`ticket` (`id`, `customer_id`, `flight_number`, `seat`, `purchase_date`) VALUES ('5', '3', '4343', '1', '2030-04-04 21:00:00');
+INSERT INTO `traveldb`.`ticket` (`id`, `customer_id`, `flight_number`, `seat`, `purchase_date`) VALUES ('6', '3', '9641', '9', '2030-12-09 11:00:00');
+
+verificado resultados que gerou SELECT * FROM ticket;
+# id, customer_id, flight_number, seat, purchase_date
+1'1', '1', '1234', '13', '2030-01-01 00:00:00'
+2'2', '1', '4343', '10', '2030-06-10 09:00:00'
+3'3', '1', '1234', '16', '2030-02-02 20:00:00'
+4'4', '2', '4589', '27', '2030-03-28 15:00:00'
+5'5', '3', '4343', '1', '2030-04-04 21:00:00'
+6'6', '3', '9641', '9', '2030-12-09 11:00:00'
+
+se quiser retornar os tickets ordenados de forma crescente de compra
+para isso utilizar o ORDER BY que é uma seção dentro da instrução SELECT que faz essa ordenação. Informar o campo para ordenar seguido da ordem ASC para ascendente
+SELECT * FROM ticket ORDER BY purchase_date ASC;
+# id, customer_id, flight_number, seat, purchase_date
+1'1', '1', '1234', '13', '2030-01-01 00:00:00'
+2'2', '1', '4343', '10', '2030-06-10 09:00:00'
+3'3', '1', '1234', '16', '2030-02-02 20:00:00'
+4'4', '2', '4589', '27', '2030-03-28 15:00:00'
+5'5', '3', '4343', '1', '2030-04-04 21:00:00'
+6'6', '3', '9641', '9', '2030-12-09 11:00:00'
+
+
+ou DESC para descendente
+SELECT * FROM ticket ORDER BY purchase_date DESC;
+# id, customer_id, flight_number, seat, purchase_date
+1'6', '3', '9641', '9', '2030-12-09 11:00:00'
+2'2', '1', '4343', '10', '2030-06-10 09:00:00'
+3'5', '3', '4343', '1', '2030-04-04 21:00:00'
+4'4', '2', '4589', '27', '2030-03-28 15:00:00'
+5'3', '1', '1234', '16', '2030-02-02 20:00:00'
+6'1', '1', '1234', '13', '2030-01-01 00:00:00'
+
+
+se for ascendente o ASC é opcional porque o mysql já faz a ordenação crescente
+SELECT * FROM ticket ORDER BY purchase_date;
+# id, customer_id, flight_number, seat, purchase_date
+'1', '1', '1234', '13', '2030-01-01 00:00:00'
+'3', '1', '1234', '16', '2030-02-02 20:00:00'
+'4', '2', '4589', '27', '2030-03-28 15:00:00'
+'5', '3', '4343', '1', '2030-04-04 21:00:00'
+'2', '1', '4343', '10', '2030-06-10 09:00:00'
+'6', '3', '9641', '9', '2030-12-09 11:00:00'
+
+
+É possível combinar o ORDER BY com as condições e a projeção, por exemplo, para saber quais são os assentos que o cliente 1 sentou ordenados de forma crescente de compra do ticket
+SELECT seat FROM ticket WHERE customer_id = 1 ORDER BY purchase_date;
+OBS.: não é possível trocar a ordem das coisas, apesar de where, order by serem opcionais quando eles aparecem devem aparecer numa ordem certa, onde o FROM vem primeiro, depois o WHERE e por fim o ORDER BY
+# seat
+1'13'
+2'16'
+3'10'
+
+
+Se quiser ordenar por mais de um campo, por exemplo, se a data de compra for a mesma e quero ter um "desempate", pode utilizar um segundo critério de ordenação colocando a vírgula e o próximo campo.
+SELECT * FROM ticket WHERE customer_id = 1 ORDER BY purchase_date, flight_number;
+# id, customer_id, flight_number, seat, purchase_date
+1'1', '1', '1234', '13', '2030-01-01 00:00:00'
+2'3', '1', '1234', '16', '2030-02-02 20:00:00'
+3'2', '1', '4343', '10', '2030-06-10 09:00:00'
+
+
+se quiser que o flight_number seja projetado decrescente usar o DESC, inclusive pode definir um campo para ascendente e outro para descendente
+SELECT * FROM ticket WHERE customer_id = 1 ORDER BY purchase_date, flight_number DESC;
+# id, customer_id, flight_number, seat, purchase_date
+1'1', '1', '1234', '13', '2030-01-01 00:00:00'
+2'3', '1', '1234', '16', '2030-02-02 20:00:00'
+3'2', '1', '4343', '10', '2030-06-10 09:00:00'
+
