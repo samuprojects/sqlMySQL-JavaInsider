@@ -1,0 +1,90 @@
+Quando se fala que um banco de dados é relacional isso implica afirmar que estamos relacionando as tabelas, feita através das chaves estrangeiras que contém referências para registros de uma outra tabela.
+Quando buscamos informações através de um comando SELECT podemos fazê-lo com a junção dos dados que estão em tabelas, relacionando-os através das chaves estrangeiras.
+Para exemplificar retornado os dados de customer: SELECT * FROM customer; e address: SELECT * FROM address;
+# id, name, email
+1'1', 'Paulo Silva', 'paulo@abc.com'
+2'2', 'José Moreira', 'jose@abc.com'
+3'3', 'Maria Santos', 'maria@abc.com'
+
+# customer_id, line1, line2, city, country
+1'1', 'Rua dos Abacates, 100. CEP 90000-000', NULL, 'Rio de Janeiro', 'Brasil'
+2'2', 'Rua do Limoeiro, 40, ap. 100', NULL, 'Fortaleza', 'Brasil'
+3'3', 'Rua da Pera, 240', NULL, 'Rio de Janeiro', 'Brasil'
+
+
+Para executar uma instrução SELECT que retorne a junção das colunas das duas tabelas diferentes podemos utilizar o INNER JOIN conforme a seguir:
+Chamamos o SELECT * para todos os campos FROM da tabela customer e realizamos um INNER JOIN address com a tabela address e o ON indica qual é a coluna de uma tabela que vai relacionar com a outra.
+Nesse caso a coluna customer.id = address.customer_id
+Ou seja, vamos juntar as duas tabelas onde o customer.id é igual ao address.customer_id.
+Isso vai retornar o cliente juntamente com o seu endereço
+SELECT * FROM customer INNER JOIN address ON customer.id = address.customer_id;
+# id, name, email, customer_id, line1, line2, city, country
+1'1', 'Paulo Silva', 'paulo@abc.com', '1', 'Rua dos Abacates, 100. CEP 90000-000', NULL, 'Rio de Janeiro', 'Brasil'
+2'2', 'José Moreira', 'jose@abc.com', '2', 'Rua do Limoeiro, 40, ap. 100', NULL, 'Fortaleza', 'Brasil'
+3'3', 'Maria Santos', 'maria@abc.com', '3', 'Rua da Pera, 240', NULL, 'Rio de Janeiro', 'Brasil'
+
+
+Se quiser simplificar, ao trabalhar com JOIN, pode-se utilizar o recurso de ALIAS (apelidos) para nomes de tabelas, deixando o SELECT um pouco mais curto.
+
+Já foi visto como dar apelidos para as colunas, mas no caso do JOIN, dar apelidos para tabelas pode ser útil.
+
+SELECT * FROM customer AS c INNER JOIN address AS a ON customer.id = address.customer_id;
+Com isso não precisamos chamar mais de customer e address apenas de c / a respectivamente.
+
+SELECT * FROM customer AS c INNER JOIN address AS a ON c.id = a.customer_id;
+# id, name, email, customer_id, line1, line2, city, country
+1'1', 'Paulo Silva', 'paulo@abc.com', '1', 'Rua dos Abacates, 100. CEP 90000-000', NULL, 'Rio de Janeiro', 'Brasil'
+2'2', 'José Moreira', 'jose@abc.com', '2', 'Rua do Limoeiro, 40, ap. 100', NULL, 'Fortaleza', 'Brasil'
+3'3', 'Maria Santos', 'maria@abc.com', '3', 'Rua da Pera, 240', NULL, 'Rio de Janeiro', 'Brasil'
+
+
+Se quiser retornar apenas as colunas de customer agora podemos chamar c.*
+SELECT c.* FROM customer AS c INNER JOIN address AS a ON c.id = a.customer_id;
+# id, name, email
+1'1', 'Paulo Silva', 'paulo@abc.com'
+2'2', 'José Moreira', 'jose@abc.com'
+3'3', 'Maria Santos', 'maria@abc.com'
+
+
+Se quiser retornar apenas os dados de address agora podemos chamar a.*
+SELECT a.* FROM customer AS c INNER JOIN address AS a ON c.id = a.customer_id;
+# customer_id, line1, line2, city, country
+1'1', 'Rua dos Abacates, 100. CEP 90000-000', NULL, 'Rio de Janeiro', 'Brasil'
+2'2', 'Rua do Limoeiro, 40, ap. 100', NULL, 'Fortaleza', 'Brasil'
+3'3', 'Rua da Pera, 240', NULL, 'Rio de Janeiro', 'Brasil'
+
+
+Se, por exemplo, quiser combinar o nome do cliente com a cidade
+SELECT c.name, a.city FROM customer AS c INNER JOIN address AS a ON c.id = a.customer_id;
+# name, city
+1'Paulo Silva', 'Rio de Janeiro'
+2'José Moreira', 'Fortaleza'
+3'Maria Santos', 'Rio de Janeiro'
+
+
+Isso significa que ao utilizar o SELECT com o JOIN temos a disposição todas as colunas das duas tabelas, podendo referenciá-las dessa forma.
+
+Se as colunas não possuem nomes iguais é possível omitir o prefixo com o nome da tabela conforme a seguir
+SELECT name, city FROM customer AS c INNER JOIN address AS a ON c.id = a.customer_id;
+# name, city
+1'Paulo Silva', 'Rio de Janeiro'
+2'José Moreira', 'Fortaleza'
+3'Maria Santos', 'Rio de Janeiro'
+
+
+É possível fazer um ALIAS também
+SELECT name AS Nome, city AS Cidade FROM customer AS c INNER JOIN address AS a ON c.id = a.customer_id;
+# Nome, Cidade
+1'Paulo Silva', 'Rio de Janeiro'
+2'José Moreira', 'Fortaleza'
+3'Maria Santos', 'Rio de Janeiro'
+
+
+É possível combinar com uma cláusula WHERE para trazer somente uma cidade específica
+SELECT name AS Nome, city AS Cidade FROM customer AS c INNER JOIN address AS a ON c.id = a.customer_id WHERE city = 'Rio de Janeiro';
+# Nome, Cidade
+1'Paulo Silva', 'Rio de Janeiro'
+2'Maria Santos', 'Rio de Janeiro'
+
+
+O JOIN é muito poderoso, permite juntar os dados de duas tabelas e aplicar todos os conceitos já vistos de condições, projeção, agrupamento, ordenação em cima desses registros combinados.
