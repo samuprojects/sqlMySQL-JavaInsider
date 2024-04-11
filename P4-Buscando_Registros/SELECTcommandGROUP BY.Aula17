@@ -1,0 +1,70 @@
+Para fazer agrupamentos de registros podemos utilizar o GROUP BY do SELECT. É um recurso poderoso que permite agrupar registros semelhantes utilizando alguma função para gerar um resultado com base nessa agregação.
+Verificado a lista de aeorportos SELECT * FROM airport;
+# iata_code, name, country
+1'GIG', 'Aeroporto Int. do RJ Tom Jobim (Galeão)', 'Brasil'
+2'GRU', 'Aeroporto de Guarulhos', 'Brasil'
+3'LAX', 'Aeroporto de Los Angeles', 'EUA'
+4'MIA', 'Miami Int.', 'EUA'
+
+
+Para retornar o país onde o aeroporto está cadastrado e quantos aeroportos estão cadastrados nesse país podemos utilizar uma combinação do GROUP BY, para fazer o agrupamento, e do COUNT, que permite fazer contagem.
+SELECT country, count(*) FROM airport;
+o count(*) é uma função que permite contar registros
+Se executar dessa forma vai dar o Error Code: 1140. In aggregated query without GROUP BY, expression #1 of SELECT list contains nonaggregated column 'traveldb.airport.country'; this is incompatible with sql_mode=only_full_group_by
+Isso ocorre porque o count é uma função que só pode ser aplicada em registros agrupados, por isso acrescentamos um GROUP BY conforme a seguir:
+SELECT country, count(*) FROM airport GROUP BY country;
+# country, count(*)
+1'Brasil', '2'
+2'EUA', '2'
+
+
+Outro exemplo agora com flight SELECT * FROM flight;
+# number, dep_airport_iata_code, arr_airport_iata_code, dep_time, arr_time, price
+1'1234', 'GRU', 'LAX', '2030-10-01 14:00:00', '2030-10-02 03:00:00', '410.00'
+2'4343', 'GIG', 'GRU', '2030-11-20 14:00:00', '2030-11-20 14:40:00', '80.00'
+3'4589', 'GRU', 'MIA', '2030-02-01 23:00:00', '2030-02-02 05:00:00', '350.00'
+4'9641', 'GIG', 'MIA', '2020-06-10 23:00:00', '2030-06-10 05:00:00', '350.00'
+
+
+Para somar todos os preços dos voos podemos utilizar SELECT sum(price) FROM flight;
+sum é uma função de agregação que soma valores.
+# sum(price)
+1'1190.00'
+Nesse exemplo não foi utilizado o agrupamento porque o objetivo era somar todos os registros.
+
+
+Se quiser somar os preços por aeroportos de saída
+SELECT dep_airport_iata_code, sum(price) FROM flight GROUP BY dep_airport_iata_code;
+# dep_airport_iata_code, sum(price)
+1'GIG', '430.00'
+2'GRU', '760.00'
+
+
+Assim como temos sum para a soma, também temos o average para calcular a média, e poderíamos acrescentar na projeção
+SELECT dep_airport_iata_code, sum(price), avg(price) FROM flight GROUP BY dep_airport_iata_code;
+# dep_airport_iata_code, sum(price), avg(price)
+1'GIG', '430.00', '215.000000'
+2'GRU', '760.00', '380.000000'
+
+
+Podemos utilizar ainda o min e o max para retornar o preço mínimo e o preço máximo
+SELECT dep_airport_iata_code, sum(price), avg(price), min(price), max(price) FROM flight GROUP BY dep_airport_iata_code;
+# dep_airport_iata_code, sum(price), avg(price), min(price), max(price)
+1'GIG', '430.00', '215.000000', '80.00', '350.00'
+2'GRU', '760.00', '380.000000', '350.00', '410.00'
+
+
+Ainda poderia incluir a contagem
+SELECT dep_airport_iata_code, sum(price), avg(price), min(price), max(price), count(price) FROM flight GROUP BY dep_airport_iata_code;
+# dep_airport_iata_code, sum(price), avg(price), min(price), max(price), count(price)
+1'GIG', '430.00', '215.000000', '80.00', '350.00', '2'
+2'GRU', '760.00', '380.000000', '350.00', '410.00', '2'
+
+
+Se quiser ainda pode retornar essas informações para um único aeroporto utilizando o WHERE  e passando o aeroporto antes do GROUP BY conforme a seguir
+SELECT dep_airport_iata_code, sum(price), avg(price), min(price), max(price), count(price) FROM flight WHERE dep_airport_iata_code = 'GRU' GROUP BY dep_airport_iata_code;
+# dep_airport_iata_code, sum(price), avg(price), min(price), max(price), count(price)
+1'GRU', '760.00', '380.000000', '350.00', '410.00', '2'
+
+
+Enfim, o SELECT permite trabalhar com os dados de inúmeras formas conforme a necessidade.
