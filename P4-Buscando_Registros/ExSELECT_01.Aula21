@@ -1,0 +1,60 @@
+Para fixar o professor apresentou alguns exercícios guiados conforme a seguir:
+
+Valor total dos tickets em voos que saem dos aeroportos do Brasil
+
+SELECT * FROM ticket;
+Os tickets estão associados a um flight,
+
+SELEC * FROM flight;
+O flight tem um preço e os aeroportos de saída e,
+
+SELECT * FROM airport;
+Dentro do cadastro do aeroporto temos a informação do país.
+
+
+Para solução devemos cruzar a informação dos voos específicos da tabela ticket, com o aeroporto de saída do voo da tabela flight, que tenha como país o Brasil da tabela airport.
+
+Se começar com um INNER JOIN entre flight e airport retornando o aeroporto de saída com seu respectivo iata_code já vai trazer voos específicos .
+SELECT * FROM flight f INNER JOIN airport a ON f.dep_airport_iata_code = a.iata_code;
+# number, dep_airport_iata_code, arr_airport_iata_code, dep_time, arr_time, price, iata_code, name, country
+1'1234', 'GRU', 'LAX', '2030-10-01 14:00:00', '2030-10-02 03:00:00', '410.00', 'GRU', 'Aeroporto de Guarulhos', 'Brasil'
+2'4343', 'GIG', 'GRU', '2030-11-20 14:00:00', '2030-11-20 14:40:00', '80.00', 'GIG', 'Aeroporto Int. do RJ Tom Jobim (Galeão)', 'Brasil'
+3'4589', 'GRU', 'MIA', '2030-02-01 23:00:00', '2030-02-02 05:00:00', '350.00', 'GRU', 'Aeroporto de Guarulhos', 'Brasil'
+4'9641', 'GIG', 'MIA', '2020-06-10 23:00:00', '2030-06-10 05:00:00', '350.00', 'GIG', 'Aeroporto Int. do RJ Tom Jobim (Galeão)', 'Brasil'
+
+(coincidentemente todos os aeroportos são do Brasil)
+Para manter a consistência utilizamos o WHERE para filtrar somente os do Brasil
+SELECT * FROM flight f INNER JOIN airport a ON f.dep_airport_iata_code = a.iata_code WHERE a.country = 'Brasil';
+O resultado é a mesma tabela acima.
+
+
+Como ainda não há relação com os tickets, precisamos trazer apenas os voos que tem tickets associados.
+Para isso vamos incluir outro JOIN com ticket
+SELECT * FROM flight f INNER JOIN airport a ON f.dep_airport_iata_code = a.iata_code  INNER JOIN ticket t ON t.flight_number = f.number WHERE a.country = 'Brasil';
+# number, dep_airport_iata_code, arr_airport_iata_code, dep_time, arr_time, price, iata_code, name, country, id, customer_id, flight_number, seat, purchase_date
+1'4343', 'GIG', 'GRU', '2030-11-20 14:00:00', '2030-11-20 14:40:00', '80.00', 'GIG', 'Aeroporto Int. do RJ Tom Jobim (Galeão)', 'Brasil', '2', '1', '4343', '10', '2030-06-10 09:00:00'
+2'4343', 'GIG', 'GRU', '2030-11-20 14:00:00', '2030-11-20 14:40:00', '80.00', 'GIG', 'Aeroporto Int. do RJ Tom Jobim (Galeão)', 'Brasil', '5', '3', '4343', '1', '2030-04-04 21:00:00'
+3'9641', 'GIG', 'MIA', '2020-06-10 23:00:00', '2030-06-10 05:00:00', '350.00', 'GIG', 'Aeroporto Int. do RJ Tom Jobim (Galeão)', 'Brasil', '6', '3', '9641', '9', '2030-12-09 11:00:00'
+4'1234', 'GRU', 'LAX', '2030-10-01 14:00:00', '2030-10-02 03:00:00', '410.00', 'GRU', 'Aeroporto de Guarulhos', 'Brasil', '1', '1', '1234', '13', '2030-01-01 00:00:00'
+5'1234', 'GRU', 'LAX', '2030-10-01 14:00:00', '2030-10-02 03:00:00', '410.00', 'GRU', 'Aeroporto de Guarulhos', 'Brasil', '3', '1', '1234', '16', '2030-02-02 20:00:00'
+6'4589', 'GRU', 'MIA', '2030-02-01 23:00:00', '2030-02-02 05:00:00', '350.00', 'GRU', 'Aeroporto de Guarulhos', 'Brasil', '4', '2', '4589', '27', '2030-03-28 15:00:00'
+
+O resultado constará informações duplicadas porque, devido relacionamento das tabelas, podemos ter mais de um ticket para o mesmo aeroporto (ocorrido em GRU e GIG), o que é normal.
+
+Como o exercício pede o VALOR TOTAL DOS TICKETS e temos dois tickets diferentes com o mesmo voo, devemos somar duas vezes.
+
+Baseado nessa análise agora apenas trocamos o SELECT * por um SELECT SUM da coluna price que agregará todos os resultados trazendo a soma total dos tickets que saem do Brasil.
+SELECT SUM(f.price) FROM flight f INNER JOIN airport a ON f.dep_airport_iata_code = a.iata_code  INNER JOIN ticket t ON t.flight_number = f.number WHERE a.country = 'Brasil';
+# SUM(f.price)
+1'1680.00'
+
+
+
+
+
+
+
+
+
+
+
