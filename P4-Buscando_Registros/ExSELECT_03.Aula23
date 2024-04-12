@@ -1,0 +1,55 @@
+Exercício guiado para saber:
+O valor total gasto por cada cliente, agrupado pelo nome do cliente
+
+SELECT * FROM ticket;
+No ticket temos a informação do customer_id (que pode relacionar com a tabela customer e pegar o nome desses clientes, comando abaixo)
+# id, customer_id, flight_number, seat, purchase_date
+1'1', '1', '1234', '13', '2030-01-01 00:00:00'
+2'2', '1', '4343', '10', '2030-06-10 09:00:00'
+3'3', '1', '1234', '16', '2030-02-02 20:00:00'
+4'4', '2', '4589', '27', '2030-03-28 15:00:00'
+5'5', '3', '4343', '1', '2030-04-04 21:00:00'
+6'6', '3', '9641', '9', '2030-12-09 11:00:00'
+
+
+tickets com nomes dos clientes
+SELECT * FROM ticket t INNER JOIN customer c ON c.id = t.customer_id;
+# id, customer_id, flight_number, seat, purchase_date, id, name, email
+1'1', '1', '1234', '13', '2030-01-01 00:00:00', '1', 'Paulo Silva', 'paulo@abc.com'
+2'2', '1', '4343', '10', '2030-06-10 09:00:00', '1', 'Paulo Silva', 'paulo@abc.com'
+3'3', '1', '1234', '16', '2030-02-02 20:00:00', '1', 'Paulo Silva', 'paulo@abc.com'
+4'4', '2', '4589', '27', '2030-03-28 15:00:00', '2', 'José Moreira', 'jose@abc.com'
+5'5', '3', '4343', '1', '2030-04-04 21:00:00', '3', 'Maria Santos', 'maria@abc.com'
+6'6', '3', '9641', '9', '2030-12-09 11:00:00', '3', 'Maria Santos', 'maria@abc.com'
+
+
+A informação de gastos está na tabela de voos por isso incluímos um INNER JOIN com flight e trazemos o que precisamos
+SELECT * FROM ticket t INNER JOIN customer c ON c.id = t.customer_id INNER JOIN flight f ON f.number = t.flight_number;
+# id, customer_id, flight_number, seat, purchase_date, id, name, email, number, dep_airport_iata_code, arr_airport_iata_code, dep_time, arr_time, price
+1'1', '1', '1234', '13', '2030-01-01 00:00:00', '1', 'Paulo Silva', 'paulo@abc.com', '1234', 'GRU', 'LAX', '2030-10-01 14:00:00', '2030-10-02 03:00:00', '410.00'
+2'3', '1', '1234', '16', '2030-02-02 20:00:00', '1', 'Paulo Silva', 'paulo@abc.com', '1234', 'GRU', 'LAX', '2030-10-01 14:00:00', '2030-10-02 03:00:00', '410.00'
+3'2', '1', '4343', '10', '2030-06-10 09:00:00', '1', 'Paulo Silva', 'paulo@abc.com', '4343', 'GIG', 'GRU', '2030-11-20 14:00:00', '2030-11-20 14:40:00', '80.00'
+4'5', '3', '4343', '1', '2030-04-04 21:00:00', '3', 'Maria Santos', 'maria@abc.com', '4343', 'GIG', 'GRU', '2030-11-20 14:00:00', '2030-11-20 14:40:00', '80.00'
+5'4', '2', '4589', '27', '2030-03-28 15:00:00', '2', 'José Moreira', 'jose@abc.com', '4589', 'GRU', 'MIA', '2030-02-01 23:00:00', '2030-02-02 05:00:00', '350.00'
+6'6', '3', '9641', '9', '2030-12-09 11:00:00', '3', 'Maria Santos', 'maria@abc.com', '9641', 'GIG', 'MIA', '2020-06-10 23:00:00', '2030-06-10 05:00:00', '350.00'
+
+
+Agora basta agrupar da forma solicitada pelo enunciado que é pelo nome do cliente somando o preço dos tickets
+Para começar esse processo trocamos o SELECT * por SELECT c.name, f.price    mas ainda não está agrupado, por isso tem registros duplicados ou mais.
+SELECT c.name, f.price FROM ticket t INNER JOIN customer c ON c.id = t.customer_id INNER JOIN flight f ON f.number = t.flight_number;
+# name, price
+1'Paulo Silva', '410.00'
+2'Paulo Silva', '410.00'
+3'Paulo Silva', '80.00'
+4'Maria Santos', '80.00'
+5'José Moreira', '350.00'
+6'Maria Santos', '350.00'
+
+
+Para agrupar somando: colocamos um SUM passando o campo f.price e precisamos informar qual é a coluna que desejamos agrupar por meio do GROUP BY.
+SELECT c.name, sum(f.price) FROM ticket t INNER JOIN customer c ON c.id = t.customer_id INNER JOIN flight f ON f.number = t.flight_number GROUP BY c.name;
+# name, sum(f.price)
+1'Paulo Silva', '900.00'
+2'Maria Santos', '430.00'
+3'José Moreira', '350.00'
+
