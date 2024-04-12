@@ -1,0 +1,62 @@
+Sobre o tema de relacionamentos das tabelas foi observado os dados de customer: SELECT * FROM customer; e address: SELECT * FROM address; 
+1'1', 'Paulo Silva', 'paulo@abc.com'
+2'2', 'José Moreira', 'jose@abc.com'
+3'3', 'Maria Santos', 'maria@abc.com'
+
+# customer_id, line1, line2, city, country
+1'1', 'Rua dos Abacates, 100. CEP 90000-000', NULL, 'Rio de Janeiro', 'Brasil'
+2'2', 'Rua do Limoeiro, 40, ap. 100', NULL, 'Fortaleza', 'Brasil'
+3'3', 'Rua da Pera, 240', NULL, 'Rio de Janeiro', 'Brasil'
+
+
+Criado na parte gráfica mais um customer que na tabela address estará sem um endereço associado.
+INSERT INTO `traveldb`.`customer` (`name`, `email`) VALUES ('Pedro Soares', 'pedro@abc.com');
+
+SELECT * FROM customer;
+# id, name, email
+1'1', 'Paulo Silva', 'paulo@abc.com'
+2'2', 'José Moreira', 'jose@abc.com'
+3'3', 'Maria Santos', 'maria@abc.com'
+4'4', 'Pedro Soares', 'pedro@abc.com'
+
+
+Para trazer os registros das duas tabelas por meio de um JOIN poderíamos fazer
+SELECT * FROM customer c INNER JOIN address a ON c.id = a.customer_id;
+
+Ao fazer isso o resultado omitirá o novo customer inserido a pouco
+# id, name, email, customer_id, line1, line2, city, country
+1'1', 'Paulo Silva', 'paulo@abc.com', '1', 'Rua dos Abacates, 100. CEP 90000-000', NULL, 'Rio de Janeiro', 'Brasil'
+2'2', 'José Moreira', 'jose@abc.com', '2', 'Rua do Limoeiro, 40, ap. 100', NULL, 'Fortaleza', 'Brasil'
+3'3', 'Maria Santos', 'maria@abc.com', '3', 'Rua da Pera, 240', NULL, 'Rio de Janeiro', 'Brasil'
+
+
+Isso é um efeito colateral da operação de INNER JOIN, pois realiza a junção apenas dos registros que possuem correspondência dos dos lados das tabelas.
+Como os customer 1, 2, 3 também constam referências na tabela address, com base na condição do ON inserida, vai trazer esses três registros.
+
+No caso do customer com id 4 que só tem correspondência de um dos lados (lado do customer) não retornará nos resultados.
+
+Para identificar esse tipo de situação pode-se utilizar o OUTER JOIN, que funciona semelhante ao INNER JOIN, porém, com a diferença de permitir JOIN sem que existam correspondências exatas dos dois lados das tabelas.
+
+
+Existem 3 tipos de OUTER JOIN:
+o LEFT OUTER JOIN, o RIGHT OUTER JOIN E O FULL OUTER JOIN, que basicamente indicam onde é que estará o registro sem correspondência para poder retornar os dados.
+
+
+Baseado nisso a tabela do lado esquerdo (considerando customer fazendo JOIN com address) será a que no nosso caso vai trazer o customer de id 4 independente de ter relacionamento ou não com a tabela address, por isso podemos utilizar o LEFT JOIN conforme a seguir:
+SELECT * FROM customer c LEFT JOIN address a ON c.id = a.customer_id;
+
+obs.: Não é preciso escrever LEFT OUTER JOIN porque o Workbench já sabe que é um OUTER JOIN do tipo LEFT.
+
+
+O resultado será o retorno de todos os dados, PORÉM, como o customer com id 4 não tem correspondência em address o lado direito vem com todos os campos nulos
+# id, name, email, customer_id, line1, line2, city, country
+1'1', 'Paulo Silva', 'paulo@abc.com', '1', 'Rua dos Abacates, 100. CEP 90000-000', NULL, 'Rio de Janeiro', 'Brasil'
+2'2', 'José Moreira', 'jose@abc.com', '2', 'Rua do Limoeiro, 40, ap. 100', NULL, 'Fortaleza', 'Brasil'
+3'3', 'Maria Santos', 'maria@abc.com', '3', 'Rua da Pera, 240', NULL, 'Rio de Janeiro', 'Brasil'
+4'4', 'Pedro Soares', 'pedro@abc.com', NULL, NULL, NULL, NULL, NULL
+
+
+É assim que trazemos os registros que não apareceriam dentro de uma situação de INNER JOIN.
+
+
+
